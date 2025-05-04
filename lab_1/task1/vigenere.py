@@ -1,10 +1,12 @@
 from const import ALPHABET
 
+
 def is_valid_char(char: str) -> bool:
     """
     Проверяет, принадлежит ли символ алфавиту (регистронезависимо).
     """
     return char.lower() in ALPHABET
+
 
 def get_key_symbol(key: str, index: int) -> str:
     """
@@ -13,6 +15,7 @@ def get_key_symbol(key: str, index: int) -> str:
     if not key:
         raise ValueError("Key can't be empty!")
     return key[index % len(key)]
+
 
 def get_encrypted_symbol(old_symbol: str, key_symbol: str) -> str:
     """

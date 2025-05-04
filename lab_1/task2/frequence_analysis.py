@@ -1,5 +1,6 @@
 import json
 
+
 def save_frequence_to_json(filename: str, d: dict) -> None:
     """
         Сохраняет словарь частот в JSON файл.

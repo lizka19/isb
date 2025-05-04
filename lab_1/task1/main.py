@@ -1,7 +1,7 @@
 import json
 import argparse
-import sys
 from argparse import Namespace
+import sys
 from vigenere import *
 
 
