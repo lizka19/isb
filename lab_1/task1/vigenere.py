@@ -1,16 +1,24 @@
 from const import ALPHABET
 
 def is_valid_char(char: str) -> bool:
-    
+    """
+    Проверяет, принадлежит ли символ алфавиту (регистронезависимо).
+    """
     return char.lower() in ALPHABET
 
 def get_key_symbol(key: str, index: int) -> str:
-    
+    """
+    Возвращает символ ключа по индексу.
+    """
     if not key:
         raise ValueError("Key can't be empty!")
     return key[index % len(key)]
 
 def get_encrypted_symbol(old_symbol: str, key_symbol: str) -> str:
+    """
+        Шифрует символ по алгоритму Виженера.
+        Возвращает исходный символ, если он или символ ключа не в ALPHABET.
+    """
 
     if not old_symbol.isalpha() or not is_valid_char(old_symbol) or not is_valid_char(key_symbol):
         return old_symbol
@@ -27,7 +35,9 @@ def get_encrypted_symbol(old_symbol: str, key_symbol: str) -> str:
 
 
 def vigenere_cipher_encrypt(input_text: str, key: str) -> str:
-    
+    """
+    Шифрует текст, игнорируя символы вне алфавита.
+    """
     if not input_text:
         raise ValueError("Input text can't be empty")
     if not key:
@@ -48,6 +58,9 @@ def vigenere_cipher_encrypt(input_text: str, key: str) -> str:
 
 
 def get_decrypted_symbol(encrypted_symbol: str, key_sym: str) -> str:
+    """
+    Дешифрует символ, аналогично get_encrypted_symbol
+    """
     if not encrypted_symbol.isalpha() or not is_valid_char(encrypted_symbol) or not is_valid_char(key_sym):
         return encrypted_symbol
 
@@ -62,6 +75,9 @@ def get_decrypted_symbol(encrypted_symbol: str, key_sym: str) -> str:
 
 
 def vigenere_cipher_decrypt(encrypted_text: str, key: str) -> str:
+    """
+    Дешифрует текст, аналогично vigenere_cipher_encrypt
+    """
     if not encrypted_text:
         raise ValueError("Encrypted text can't be empty")
     if not key:

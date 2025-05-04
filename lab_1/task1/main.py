@@ -1,11 +1,15 @@
 import json
 import argparse
-from argparse import Namespace
 import sys
+from argparse import Namespace
 from vigenere import *
 
 
 def parser() -> Namespace:
+    """
+    Парсер аргументов командной строки
+    :return: Распарсенные аргументы
+    """
     parser = argparse.ArgumentParser()
     parser.add_argument('input_text', type=str, help='Имя файла с исходным текстом')
     parser.add_argument('output_text', type=str, help='Имя файла для сохранения результата')
@@ -14,6 +18,11 @@ def parser() -> Namespace:
 
 
 def read_key_from_json(filename: str) -> str:
+    """
+    Чтение ключа из JSON-файла
+    :param filename: Путь к JSON-файлу с ключом
+    :return: Ключ шифрования
+    """
     try:
         with open(filename, 'r', encoding='utf-8') as f:
             data = json.load(f)
@@ -29,7 +38,11 @@ def read_key_from_json(filename: str) -> str:
 
 
 def read_text(filename: str) -> str:
-
+    """
+    Функция чтения текста из файла
+    :param filename: Путь к файлу для чтения
+    :return: Прочитанный текст
+    """
     try:
         with open(filename, 'r', encoding='utf-8') as text:
             return text.read()
@@ -39,6 +52,12 @@ def read_text(filename: str) -> str:
 
 
 def write_encrypted_text(filename: str, text: str) -> None:
+    """
+    Функция записи текста в файл
+    :param filename: Путь к файлу для записи
+    :param text: Текст для сохранения
+    :return: None
+    """
     try:
         with open(filename, 'w', encoding='utf-8') as file:
             file.write(text)
@@ -50,7 +69,6 @@ def write_encrypted_text(filename: str, text: str) -> None:
 def main():
     args = parser()
 
-    # Читаем ключ из JSON-файла
     key = read_key_from_json(args.key)
 
     input_text = read_text(args.input_text)
