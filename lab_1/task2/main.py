@@ -6,9 +6,9 @@ from frequence_analysis import *
 
 def write_encrypted_text(filename: str, text: str) -> None:
     """
-    Function to write text to file.
-    :param filename: Path to the file where the text will be saved.
-    :param text: Encrypted text
+    Функция для записи текста в файл.
+    :param filename: Путь к файлу, в который будет сохранен текст.
+    :param text: Зашифрованный текст
     :return: None
     """
 
@@ -25,9 +25,9 @@ def write_encrypted_text(filename: str, text: str) -> None:
 
 def read_file(filename: str) -> str:
     """
-    Text reading function.
-    :param filename: Path to the text to be read
-    :return: The input text
+    Функция для чтения текста из файла.
+    :param filename: Путь к файлу, который нужно прочитать
+    :return: Входной текст
     """
 
     try:

@@ -1,13 +1,21 @@
 import json
 
 def save_frequence_to_json(filename: str, d: dict) -> None:
-
+    """
+        Сохраняет словарь частот в JSON файл.
+        :param filename: Имя файла для сохранения данных.
+        :param d: Словарь с частотами символов.
+        """
     with open(filename, 'w', encoding='utf-8') as file:
         json.dump(d, file, ensure_ascii=False)
 
 
 def load_frequence_from_json(filename: str) -> dict:
-
+    """
+    Загружает словарь частот из JSON файла.
+    :param filename: Имя файла для загрузки данных.
+    :return: Словарь с частотами символов.
+       """
     try:
 
         with open(filename, 'r', encoding='utf-8') as file:
@@ -20,6 +28,11 @@ def load_frequence_from_json(filename: str) -> dict:
 
 
 def calculate_frequence(text: str) -> dict:
+    """
+    Вычисляет частоту символов в тексте.
+    :param text: Входной текст.
+    :return: Словарь соответствия символов их частоте в тексте.
+    """
     if not text:
         raise ValueError("Input text can't be empty.")
 
@@ -53,7 +66,12 @@ def calculate_frequence(text: str) -> dict:
 
 
 def create_mapping(encrypt_frequence: dict, rus_frequence: dict) -> dict:
-
+    """
+    Сопоставляет символы зашифрованного текста с русскими символами по частоте.
+    :param encrypt_frequence: Словарь частот символов из зашифрованного текста.
+    :param rus_frequence: Словарь ожидаемых частот русских символов.
+    :return: Словарь соответствия зашифрованных символов русским символам.
+    """
     if not encrypt_frequence or not rus_frequence:
         raise ValueError("Input dictionaries cannot be empty.")
 
@@ -69,7 +87,13 @@ def create_mapping(encrypt_frequence: dict, rus_frequence: dict) -> dict:
     return encrypt_rus_dict
 
 
-def decrypted_text(encrypted_text: str, d: dict) -> str:
+def decrypt_text(encrypted_text: str, d: dict) -> str:
+    """
+    Расшифровывает текст с использованием соответствия символов.
+    :param encrypted_text: Зашифрованный текст.
+    :param d: Словарь соответствия зашифрованных символов расшифрованным.
+    :return: Расшифрованный текст.
+    """
     if not encrypted_text:
         raise ValueError("Encrypted text can't be empty.")
 
@@ -78,15 +102,15 @@ def decrypted_text(encrypted_text: str, d: dict) -> str:
 
     decrypted_text = []
 
-    for symb in encrypted_text:
+    for symbol in encrypted_text:
 
-        if symb in d:
+        if symbol in d:
 
-            decrypted_text.append(d[symb])
+            decrypted_text.append(d[symbol])
 
         else:
 
-            decrypted_text.append(symb)
+            decrypted_text.append(symbol)
 
     return ''.join(decrypted_text)
 
