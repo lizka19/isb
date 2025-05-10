@@ -1,51 +1,25 @@
 import sys
-
-from consts import *
+sys.path.append(r'C:\Users\lizak\PycharmProjects\isb\lab_1')
+from workfiles import *
 from frequence_analysis import *
+import json
 
 
-def write_encrypted_text(filename: str, text: str) -> None:
-    """
-    Функция для записи текста в файл.
-    :param filename: Путь к файлу, в который будет сохранен текст.
-    :param text: Зашифрованный текст
-    :return: None
-    """
-
-    try:
-
-        with open(filename, 'w', encoding='utf-8') as file:
-            file.write(text)
-
-    except Exception as e:
-
-        print(f"Error writing to file '{filename}': {e}")
-        sys.exit(1)
-
-
-def read_file(filename: str) -> str:
-    """
-    Функция для чтения текста из файла.
-    :param filename: Путь к файлу, который нужно прочитать
-    :return: Входной текст
-    """
-
-    try:
-
-        with open(filename, 'r', encoding='utf-8') as file:
-            return file.read()
-
-    except:
-
-        print(f"File '{filename}' not found.")
-        sys.exit(1)
+with open('consts.json', 'r', encoding='utf-8') as f:
+    const = json.load(f)
+RUSSIAN_FREQ = const['RUSSIAN_FREQ']
+RUS_FREQ_JSON = const['RUS_FREQ_JSON']
+ENCRYPTED_TEXT_TXT = const['ENCRYPTED_TEXT_TXT']
+ENCRYPTED_FREQ_JSON = const['ENCRYPTED_FREQ_JSON']
+KEY_JSON = const['KEY_JSON']
+DECRYPTED_TEXT_TXT = const['DECRYPTED_TEXT_TXT']
 
 
 def main():
 
     save_frequence_to_json(RUS_FREQ_JSON, RUSSIAN_FREQ)
 
-    encrypted_text = read_file(ENCRYPTED_TEXT_TXT)
+    encrypted_text = read_text_file(ENCRYPTED_TEXT_TXT)
 
     text_freq = calculate_frequence(encrypted_text)
 
@@ -60,7 +34,7 @@ def main():
 
     decrypted_text = decrypt_text(encrypted_text, key)
 
-    write_encrypted_text(DECRYPTED_TEXT_TXT, decrypted_text)
+    write_text_file(DECRYPTED_TEXT_TXT, decrypted_text)
 
 
 if __name__ == '__main__':

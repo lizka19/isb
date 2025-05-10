@@ -1,14 +1,20 @@
 import json
 
-
 def save_frequence_to_json(filename: str, d: dict) -> None:
     """
         Сохраняет словарь частот в JSON файл.
         :param filename: Имя файла для сохранения данных.
         :param d: Словарь с частотами символов.
         """
-    with open(filename, 'w', encoding='utf-8') as file:
-        json.dump(d, file, ensure_ascii=False)
+    try:
+
+        with open(filename, 'w', encoding='utf-8') as file:
+            json.dump(d, file, ensure_ascii=False)
+
+    except FileNotFoundError:
+
+        print(f"File '{filename}' not found.")
+        raise
 
 
 def load_frequence_from_json(filename: str) -> dict:
