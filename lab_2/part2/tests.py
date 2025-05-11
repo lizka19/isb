@@ -111,9 +111,9 @@ def longest_sequence_test(sequence: str, PI: list) -> float:
 
 
 def main():
-    config = read_json_file('consts.json')  # Убедитесь, что файл const.json существует
+    config = read_json_file('consts.json')
 
-    cpp_sequence_txt = config["cpp_sequence_txt"]  # Обратите внимание: используется "_", а не "."
+    cpp_sequence_txt = config["cpp_sequence_txt"]
     java_sequence_txt = config["java_sequence_txt"]
     test_results_cpp = config["test_results_cpp"]
     test_results_java = config["test_results_java"]
