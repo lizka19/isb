@@ -3,7 +3,12 @@ import java.util.Random;
 public class RandomBitSequence {
 
     private static final int MAXBIT = 128;
-
+/**
+     * Генерирует случайную битовую последовательность заданной длины.
+     *
+     * @param length Длина генерируемой последовательности (должна быть меньше или равна MAXBIT).
+     * @return Случайная битовая последовательность в виде строки.
+     */
     public static void main() {
 
         Random rand = new Random(System.currentTimeMillis());

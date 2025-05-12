@@ -51,11 +51,12 @@ def same_bits_test(sequence: str) -> float:
 
     return math.erfc(numerator / denominator)
 
-
-def longest_sequence_test(sequence: str, PI: list) -> float:
+def longest_sequence_test(sequence: str, PI: list, block_size: int = 8) -> float:
     """
     Выполняет тест на самую длинную последовательность единиц в блоке.
     :param sequence: Последовательность
+    :param PI: Ожидаемые вероятности для различных длин последовательностей
+    :param block_size: Размер блока (по умолчанию 8)
     :return: P-значение
     """
 
@@ -64,85 +65,74 @@ def longest_sequence_test(sequence: str, PI: list) -> float:
     if n < 128:
         raise ValueError("Minimum 128 bits")
 
-    N = n // 8
-
-    v = [0, 0, 0, 0]
+    N = n // block_size
+    v = [0] * (max(4, (block_size + 1) // 2))
 
     for i in range(N):
-
-        block = sequence[i * 8 : (i + 1) * 8]
+        block = sequence[i * block_size : (i + 1) * block_size]
 
         max_run = 0
         current_run = 0
 
         for bit in block:
-
             if bit == '1':
                 current_run += 1
-
                 if current_run > max_run:
                     max_run = current_run
-
             else:
                 current_run = 0
 
-        match max_run:
-
-            case 0 | 1:
-                v[0] += 1
-
-            case 2:
-                v[1] += 1
-
-            case 3:
-                v[2] += 1
-
-            case _:
-                v[3] += 1
+        if max_run < len(v):
+            v[max_run] += 1
+        else:
+            v[-1] += 1
 
     x_2 = 0.0
 
     for i in range(len(v)):
-        x_2 += (v[i] - 16 * PI[i]) ** 2 / (16 * PI[i])
-    p_value = gammainc(3 / 2, x_2 / 2)
+        x_2 += (v[i] - (N * PI[i])) ** 2 / (N * PI[i]) if PI[i] > 0 else 0
+
+    p_value = gammainc(len(v) / 2, x_2 / 2)
     return p_value
 
-
 def main():
-    config = read_json_file('consts.json')
+    try:
+        config = read_json_file('consts.json')
 
-    cpp_sequence_txt = config["cpp_sequence_txt"]
-    java_sequence_txt = config["java_sequence_txt"]
-    test_results_cpp = config["test_results_cpp"]
-    test_results_java = config["test_results_java"]
-    PI = config["PI"]
+        cpp_sequence_txt = config["cpp_sequence_txt"]
+        java_sequence_txt = config["java_sequence_txt"]
+        test_results_cpp = config["test_results_cpp"]
+        test_results_java = config["test_results_java"]
+        PI = config["PI"]
 
-    cpp_sequence = read_file(cpp_sequence_txt)
-    java_sequence = read_file(java_sequence_txt)
+        cpp_sequence = read_file(cpp_sequence_txt)
+        java_sequence = read_file(java_sequence_txt)
 
-    p_val_freq_bits_cpp = frequency_bit_test(cpp_sequence)
-    p_val_ident_bits_cpp = same_bits_test(cpp_sequence)
-    p_val_longest_bits_block_cpp = longest_sequence_test(cpp_sequence, PI)
+        p_val_freq_bits_cpp = frequency_bit_test(cpp_sequence)
+        p_val_ident_bits_cpp = same_bits_test(cpp_sequence)
+        p_val_longest_bits_block_cpp = longest_sequence_test(cpp_sequence, PI)
 
-    result_cpp_test = (f"CPP sequence: {cpp_sequence}\n\n"
-                      f"Frequency bit test: {p_val_freq_bits_cpp}\n"
-                      f"Test for identical consecutive bits: {p_val_ident_bits_cpp}\n"
-                      f"Test for the longest sequence of ones in a block: "
-                      f"{p_val_longest_bits_block_cpp}")
+        result_cpp_test = (f"CPP sequence: {cpp_sequence}\n\n"
+                           f"Frequency bit test: {p_val_freq_bits_cpp}\n"
+                           f"Test for identical consecutive bits: {p_val_ident_bits_cpp}\n"
+                           f"Test for the longest sequence of ones in a block: "
+                           f"{p_val_longest_bits_block_cpp}")
 
-    write_file(test_results_cpp, result_cpp_test)
+        write_file(test_results_cpp, result_cpp_test)
 
-    p_val_freq_bits_java = frequency_bit_test(java_sequence)
-    p_val_ident_bits_java = same_bits_test(java_sequence)
-    p_val_longest_bits_block_java = longest_sequence_test(java_sequence, PI)
+        p_val_freq_bits_java = frequency_bit_test(java_sequence)
+        p_val_ident_bits_java = same_bits_test(java_sequence)
+        p_val_longest_bits_block_java = longest_sequence_test(java_sequence, PI)
 
-    result_java_test = (f"Java sequence: {java_sequence}\n\n"
-                      f"Frequency bit test: {p_val_freq_bits_java}\n"
-                      f"Test for identical consecutive bits: {p_val_ident_bits_java}\n"
-                      f"Test for the longest sequence of ones in a block: "
-                      f"{p_val_longest_bits_block_java}")
+        result_java_test = (f"Java sequence: {java_sequence}\n\n"
+                            f"Frequency bit test: {p_val_freq_bits_java}\n"
+                            f"Test for identical consecutive bits: {p_val_ident_bits_java}\n"
+                            f"Test for the longest sequence of ones in a block: "
+                            f"{p_val_longest_bits_block_java}")
 
-    write_file(test_results_java, result_java_test)
+        write_file(test_results_java, result_java_test)
+    except Exception as e:
+        print(f"An unexpected error occurred: {e}")
 
 
 if __name__ == "__main__":
