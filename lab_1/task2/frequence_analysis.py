@@ -1,39 +1,3 @@
-import json
-
-def save_frequence_to_json(filename: str, d: dict) -> None:
-    """
-        Сохраняет словарь частот в JSON файл.
-        :param filename: Имя файла для сохранения данных.
-        :param d: Словарь с частотами символов.
-        """
-    try:
-
-        with open(filename, 'w', encoding='utf-8') as file:
-            json.dump(d, file, ensure_ascii=False)
-
-    except FileNotFoundError:
-
-        print(f"File '{filename}' not found.")
-        raise
-
-
-def load_frequence_from_json(filename: str) -> dict:
-    """
-    Загружает словарь частот из JSON файла.
-    :param filename: Имя файла для загрузки данных.
-    :return: Словарь с частотами символов.
-       """
-    try:
-
-        with open(filename, 'r', encoding='utf-8') as file:
-            return json.load(file)
-
-    except FileNotFoundError:
-
-        print(f"File '{filename}' not found.")
-        raise
-
-
 def calculate_frequence(text: str) -> dict:
     """
     Вычисляет частоту символов в тексте.
@@ -48,11 +12,9 @@ def calculate_frequence(text: str) -> dict:
     for symbol in text:
 
         if symbol in symbol_counts:
-
             symbol_counts[symbol] += 1
 
         else:
-
             symbol_counts[symbol] = 1
 
     symbols_count = sum(symbol_counts.values())
@@ -112,11 +74,9 @@ def decrypt_text(encrypted_text: str, d: dict) -> str:
     for symbol in encrypted_text:
 
         if symbol in d:
-
             decrypted_text.append(d[symbol])
 
         else:
-
             decrypted_text.append(symbol)
 
     return ''.join(decrypted_text)

@@ -1,7 +1,9 @@
 import argparse
-from argparse import Namespace
 import sys
+
 sys.path.append(r'C:\Users\lizak\PycharmProjects\isb\lab_1')
+
+from argparse import Namespace
 from workfiles import read_key_from_json, read_text_file, write_text_file
 from vigenere import vigenere_cipher_encrypt
 

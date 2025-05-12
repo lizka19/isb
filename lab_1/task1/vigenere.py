@@ -1,6 +1,11 @@
 from workfiles import read_json_file
 
-ALPHABET = read_json_file('const.json')['ALPHABET']
+
+def get_alphabet():
+    """
+    Получает алфавит из файла с константами
+    """
+    return read_json_file('const.json')['ALPHABET']
 
 def is_valid_char(char: str) -> bool:
     """
@@ -8,7 +13,7 @@ def is_valid_char(char: str) -> bool:
     :param char: Символ для проверки.
     :return: True, если символ допустим, иначе False.
     """
-    return char.lower() in ALPHABET
+    return char.lower() in get_alphabet()
 
 
 def get_key_symbol(key: str, index: int) -> str:
@@ -31,18 +36,19 @@ def get_encrypted_symbol(old_symbol: str, key_symbol: str) -> str:
     :param key_symbol: Символ ключа для шифрования.
     :return: Зашифрованный символ или оригинальный, если он не является буквой.
     """
+    alphabet = get_alphabet()
     if not old_symbol.isalpha() or not is_valid_char(old_symbol) or not is_valid_char(key_symbol):
         return old_symbol
 
     try:
-        current_idx = ALPHABET.index(old_symbol.lower())
-        key_idx = ALPHABET.index(key_symbol.lower())
+        current_idx = alphabet.index(old_symbol.lower())
+        key_idx = alphabet.index(key_symbol.lower())
     except ValueError:
         return old_symbol
 
-    encrypt_idx = (current_idx + key_idx) % len(ALPHABET)
+    encrypt_idx = (current_idx + key_idx) % len(alphabet)
 
-    return ALPHABET[encrypt_idx].upper() if old_symbol.isupper() else ALPHABET[encrypt_idx]
+    return alphabet[encrypt_idx].upper() if old_symbol.isupper() else alphabet[encrypt_idx]
 
 
 def vigenere_cipher_encrypt(input_text: str, key: str) -> str:
@@ -78,17 +84,18 @@ def get_decrypted_symbol(encrypted_symbol: str, key_sym: str) -> str:
     :param key_sym: Символ ключа для дешифрования.
     :return: Дешифрованный символ или оригинальный, если он не является буквой.
     """
+    alphabet = get_alphabet()
     if not encrypted_symbol.isalpha() or not is_valid_char(encrypted_symbol) or not is_valid_char(key_sym):
         return encrypted_symbol
 
     try:
-        encrypted_idx = ALPHABET.index(encrypted_symbol.lower())
-        key_idx = ALPHABET.index(key_sym.lower())
+        encrypted_idx = alphabet.index(encrypted_symbol.lower())
+        key_idx = alphabet.index(key_sym.lower())
     except ValueError:
         return encrypted_symbol
 
     decrypted_idx = (encrypted_idx - key_idx) % len(ALPHABET)
-    return ALPHABET[decrypted_idx].upper() if encrypted_symbol.isupper() else ALPHABET[decrypted_idx]
+    return alphabet[decrypted_idx].upper() if encrypted_symbol.isupper() else ALPHABET[decrypted_idx]
 
 
 def vigenere_cipher_decrypt(encrypted_text: str, key: str) -> str:
