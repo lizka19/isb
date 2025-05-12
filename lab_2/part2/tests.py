@@ -104,9 +104,7 @@ def longest_sequence_test(sequence: str, PI: list) -> float:
 
     for i in range(len(v)):
         x_2 += (v[i] - 16 * PI[i]) ** 2 / (16 * PI[i])
-
     p_value = gammainc(3 / 2, x_2 / 2)
-
     return p_value
 
 
