@@ -49,3 +49,34 @@ class Encryptor:
             )
         )
 
+
+    @staticmethod
+    def padding(data: bytes) -> bytes:
+        """
+        Добавляет PKCS7 дополнение к данным перед шифрованием.
+
+        :param data: Исходные данные для дополнения в виде bytes
+        :return: Данные с PKCS7 дополнением в виде bytes
+        """
+
+        padder = sym_padding.PKCS7(algorithms.Blowfish.block_size).padder()
+
+        return padder.update(data) + padder.finalize()
+
+
+    @staticmethod
+    def encrypt_text(text: bytes, key: bytes) -> bytes:
+        """
+        Шифрует текст с использованием алгоритма Blowfish в режиме ECB.
+
+        :param text: Текст для шифрования в виде bytes
+        :param key: Симметричный ключ в виде bytes
+        :return: Зашифрованный текст в виде bytes
+        :raises ValueError: Если возникает ошибка при шифровании
+        :raises TypeError: При передаче аргументов неверного типа
+        """
+
+        padded_text = Encryptor.padding(text)
+        cipher = Cipher(algorithms.Blowfish(key), modes.ECB())
+        encryptor = cipher.encryptor()
+        return encryptor.update(padded_text) + encryptor.finalize()
