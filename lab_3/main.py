@@ -33,20 +33,14 @@ def genereate_keys(settings: dict):
 
     print("Ключи успешно сгенерированы!")
 
-
 def encrypt_mode(settings: dict):
     """
     Дешифрует симметричный ключ с помощью приватного ключа,
     шифрует текст алгоритмом Blowfish и сохраняет результат.
-
-    :param settings: Словарь с путями к файлам
-    :return: None
     """
-
     print("====Режим шифрования====")
 
-    encrypted_symmetric_key = AsymmetricKey.load_encrypted_symmetric_key(
-        settings['encrypted_symmetric_key'])
+    encrypted_symmetric_key = FileHandler.read_file(settings['encrypted_symmetric_key'])  # Изменено
     private_key = AsymmetricKey.load_private_key(settings['private_key'])
     symmetric_key = Encryptor.decrypt_symmetric_key(encrypted_symmetric_key, private_key)
 
@@ -54,7 +48,6 @@ def encrypt_mode(settings: dict):
     encrypted_text = Encryptor.encrypt_text(text, symmetric_key)
 
     FileHandler.write_to_file(settings['encrypted_text'], encrypted_text)
-
     print("Текст был успешно зашифрован и сохранен в файл!")
 
 
@@ -62,15 +55,10 @@ def decrypt_mode(settings: dict):
     """
     Дешифрует симметричный ключ с помощью RSA
     и дешифрует текст алгоритмом Blowfish.
-
-    :param settings: Словарь с путями к файлам
-    :return: None
     """
-
     print("====Режим дешифрования====")
 
-    encrypted_symmetric_key = AsymmetricKey.load_encrypted_symmetric_key(
-        settings['encrypted_symmetric_key'])
+    encrypted_symmetric_key = FileHandler.read_file(settings['encrypted_symmetric_key'])  # Изменено
     private_key = AsymmetricKey.load_private_key(settings['private_key'])
 
     symmetric_key = Encryptor.decrypt_symmetric_key(encrypted_symmetric_key, private_key)
@@ -78,8 +66,7 @@ def decrypt_mode(settings: dict):
 
     decrypted_text = Decryptor.decrypt_text(encrypted_text, symmetric_key)
     FileHandler.write_to_file(settings['decrypted_text'], decrypted_text)
-
-    print("Текст был успешно зашифровал и сохранен в файл!")
+    print("Текст был успешно расшифрован и сохранен в файл!")
 
 
 def main():
@@ -97,14 +84,14 @@ def main():
 
     settings = FileHandler.load_settings(args.settings)
 
-    if args.generation:
-        genereate_keys(settings)
+    match True:
+        case args.generation:
+            genereate_keys(settings)
+        case args.encryption:
+            encrypt_mode(settings)
+        case args.decryption:
+            decrypt_mode(settings)
 
-    elif args.encryption:
-        encrypt_mode(settings)
-
-    elif args.decryption:
-        decrypt_mode(settings)
 
 
 if __name__ == "__main__":
